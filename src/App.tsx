@@ -8,6 +8,7 @@ type SectionId =
   | "expense"
   | "systems"
   | "checklist"
+  | "contacts"
   | "security";
 
 const SECTION_LABEL: Record<SectionId, string> = {
@@ -18,11 +19,43 @@ const SECTION_LABEL: Record<SectionId, string> = {
   expense: "지출 업무 튜토리얼",
   systems: "시스템별 상세",
   checklist: "체크리스트 및 자주 하는 실수",
+  contacts: "담당자·계정 정보",
   security: "보안 및 유의사항"
 };
 
+/** 검색 시 매칭용 키워드 (해당 섹션으로 이동) */
+const SECTION_KEYWORDS: Record<SectionId, string[]> = {
+  dashboard: ["대시보드", "오늘", "처리", "마감"],
+  overview: ["업무개요", "4대시스템", "e-Branch", "연구비종합", "베스트케어", "통합이지바로", "흐름"],
+  income: ["수입", "사업비", "병원대응자금", "수입결의", "계좌거래"],
+  reallocation: ["대체결의", "간접비", "인건비", "퇴직적립금", "징수결의"],
+  expense: ["지출", "일반청구", "카드청구", "세금계산서", "계좌이체", "비목코드", "73733", "73732"],
+  systems: ["시스템", "e-Branch", "연구비종합", "베스트케어", "통합이지바로", "메뉴"],
+  checklist: ["체크리스트", "실수", "과제기간", "비목", "증빙", "결재"],
+  contacts: ["담당자", "계정", "연락처", "연락"],
+  security: ["보안", "ID", "PW", "비밀번호", "계좌", "마스킹"]
+};
+
+function findSectionByKeyword(query: string): SectionId | null {
+  const q = query.trim().toLowerCase().replace(/\s/g, "");
+  if (!q) return null;
+  const ids = Object.keys(SECTION_KEYWORDS) as SectionId[];
+  for (const id of ids) {
+    if (SECTION_LABEL[id].toLowerCase().replace(/\s/g, "").includes(q)) return id;
+    if (SECTION_KEYWORDS[id].some((k) => k.toLowerCase().replace(/\s/g, "").includes(q))) return id;
+    if (SECTION_KEYWORDS[id].some((k) => q.includes(k.toLowerCase().replace(/\s/g, "")))) return id;
+  }
+  return null;
+}
+
 function App() {
   const [active, setActive] = useState<SectionId>("overview");
+  const [searchInput, setSearchInput] = useState("");
+
+  const runSearch = () => {
+    const found = findSectionByKeyword(searchInput);
+    if (found) setActive(found);
+  };
 
   return (
     <div className="app-root">
@@ -35,6 +68,19 @@ function App() {
             <br />
             화면 단위 시뮬레이션 가이드
           </p>
+        </div>
+        <div className="search-box">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="메뉴 검색 (예: 수입, 지출, 체크리스트)"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && runSearch()}
+          />
+          <button type="button" className="search-btn" onClick={runSearch} aria-label="검색">
+            검색
+          </button>
         </div>
         <nav>
           <ul className="nav-list">
@@ -66,6 +112,7 @@ function App() {
             {active === "systems" &&
               "각 시스템별 로그인, 메뉴 경로, 화면 요소를 정리해 실제 시스템 사용을 시뮬레이션합니다."}
             {active === "checklist" && "업무 시작 전·결재 전 체크해야 할 항목과 자주 발생하는 실수를 모았습니다."}
+            {active === "contacts" && "시스템·업무별 담당자 및 계정 정보 안내. ID/PW는 보안 문서로 관리합니다."}
             {active === "security" && "ID/PW, 계좌, 연락처 등 민감 정보 취급 시 유의해야 할 사항을 안내합니다."}
             {active === "dashboard" &&
               "오늘 처리해야 할 업무 유형과 현재 단계별 진행 현황을 요약해서 보여주는 개념 대시보드입니다."}
@@ -78,6 +125,7 @@ function App() {
         {active === "expense" && <ExpenseSection />}
         {active === "systems" && <SystemsSection />}
         {active === "checklist" && <ChecklistSection />}
+        {active === "contacts" && <ContactsSection />}
         {active === "security" && <SecuritySection />}
         {active === "dashboard" && <DashboardSection />}
       </main>
@@ -634,6 +682,36 @@ function ChecklistSection() {
       </section>
 
       <section className="section">
+        <h3>업무 유형별 체크 포인트</h3>
+        <div className="card-grid">
+          <div className="card">
+            <h4>수입결의 결재 전</h4>
+            <ul className="checklist">
+              <li><span className="box" /> 입금액과 수입결의 금액 일치</li>
+              <li><span className="box" /> 재원(국고/병원대응자금) 선택 확인</li>
+              <li><span className="box" /> 계정코드 64031 등 확인</li>
+            </ul>
+          </div>
+          <div className="card">
+            <h4>대체결의 결재 전</h4>
+            <ul className="checklist">
+              <li><span className="box" /> 징수/대체 금액과 증빙 일치</li>
+              <li><span className="box" /> 대변·차변 계정(11113, 11114 등) 확인</li>
+              <li><span className="box" /> 연구비종합 결의서 + 베스트케어 결의서 셋트</li>
+            </ul>
+          </div>
+          <div className="card">
+            <h4>지출결의 결재 전</h4>
+            <ul className="checklist">
+              <li><span className="box" /> XML·증빙 금액과 입력 금액 일치</li>
+              <li><span className="box" /> 비목코드(73731~73734) 적합 여부</li>
+              <li><span className="box" /> 통합이지바로 전송·e-Branch 이체 완료 후 베스트케어</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
         <h2>자주 하는 실수</h2>
         <div className="card-grid">
           <div className="card">
@@ -656,6 +734,48 @@ function ChecklistSection() {
               전자세금계산서 XML, 카드전표, 계약서, 참석자 명단 등 필수 증빙이 누락되면 정산 시 추가 소명자료를
               요구받게 됩니다. 인계인수서의 비목별 증빙 목록을 참고하여 미리 준비합니다.
             </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ContactsSection() {
+  return (
+    <div className="scroll-section">
+      <section className="section">
+        <h2>담당자·계정 정보</h2>
+        <p>
+          시스템·업무별 담당자 및 계정 정보는 <strong>인계인수서(2026.02.13)</strong>와 내부 문서로 관리합니다.
+          ID/PW는 본 튜토리얼에 적지 않으며, 별도 보안 문서에서 확인하세요.
+        </p>
+        <div className="card-grid">
+          <div className="card">
+            <h3>시스템별 담당·계정</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>구분</th>
+                  <th>비고</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>e-Branch</td><td>인계인수서 참고 (사업장·계좌 정보)</td></tr>
+                <tr><td>연구비종합관리시스템</td><td>연구비관리자 계정(직번), 결재선 지정</td></tr>
+                <tr><td>베스트케어</td><td>부서행정·결의관리, 비목코드 73731~73734</td></tr>
+                <tr><td>통합이지바로</td><td>연계관리·이체전송 확인</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="card">
+            <h3>주요 계좌·계정 요약</h3>
+            <ul>
+              <li>· 사업비 계좌: 기업은행 55402028004050 (인계인수서 확인)</li>
+              <li>· 퇴직금 계좌: 55402028004149 (대체결의 이체 시)</li>
+              <li>· 베스트케어: 보통예금 11113, 당좌예금 11114, 인건비 73731 등</li>
+            </ul>
+            <p className="muted">연락처·내선은 내부망 또는 인계인수서에서 확인하세요.</p>
           </div>
         </div>
       </section>
