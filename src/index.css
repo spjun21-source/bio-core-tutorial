@@ -285,3 +285,31 @@ a {
   max-width: 900px;
 }
 
+/* 단계별 화면 시뮬레이션 블록 (3차) */
+.step-block {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+
+.step-block h4 {
+  font-size: 14px;
+  margin: 0 0 6px;
+  color: #e5e7eb;
+}
+
+.step-block p {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.step-block ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+

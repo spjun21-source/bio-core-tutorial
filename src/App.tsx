@@ -171,7 +171,13 @@ function IncomeSection() {
   return (
     <div className="scroll-section">
       <section className="section">
-        <h2>사업비 수입결의 시나리오</h2>
+        <h2>수입 업무 튜토리얼</h2>
+        <p>
+          사업비·병원대응자금이 입금된 후 e-Branch → 연구비종합관리시스템 → 베스트케어 순으로 수입결의를
+          완료하는 절차를 시나리오별로 따라갑니다.
+        </p>
+
+        <h3>1. 사업비 수입결의</h3>
         <p>
           <strong>상황</strong>: 한국연구재단에서 사업비가 입금되었고,{" "}
           <strong>기업은행 55402028004050(유경하_바이오코어)</strong> 계좌로 유입된 금액을 사업단 예산으로
@@ -245,6 +251,34 @@ function IncomeSection() {
             <strong>셋트로 묶어 결재</strong>하는 것이 원칙입니다.
           </div>
         </section>
+
+        <h3>2. 병원대응자금 수입결의</h3>
+        <p>
+          <strong>상황</strong>: 병원대응자금이 동일 계좌(기업은행 55402028004050) 또는 병원 지정 계좌로 입금된 후,
+          <strong> 재원을 병원대응자금으로 구분</strong>하여 수입결의를 진행하는 경우입니다.
+        </p>
+        <div className="two-column">
+          <div>
+            <p><span className="tag">사업비 수입결의와 동일 흐름</span></p>
+            <ul>
+              <li>① e-Branch에서 입금 내역 확인 (사업장·계좌 동일)</li>
+              <li>② 연구비종합관리시스템 [수입결의(계좌거래)]에서 <strong>재원을 병원대응자금으로 선택</strong></li>
+              <li>③ 과제·비목·계정은 인계인수서의 병원대응자금 기준과 일치하게 입력</li>
+            </ul>
+          </div>
+          <div>
+            <p><span className="tag">체크 포인트</span></p>
+            <ul className="checklist">
+              <li><span className="box" /> 재원: 국고 vs 병원대응자금 선택 오류 주의</li>
+              <li><span className="box" /> 입금 계좌·과제 매칭 확인</li>
+              <li><span className="box" /> 베스트케어 수입결의서 등록 시 계정코드 64031 유지</li>
+            </ul>
+            <div className="warning">
+              사업비와 병원대응자금을 같은 계좌로 받는 경우, 입금 건별로 <strong>재원 구분</strong>을 정확히 해야
+              정산·보고 시 혼선이 없습니다.
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
@@ -321,6 +355,38 @@ function ReallocationSection() {
           </div>
         </div>
       </section>
+
+      <section className="section">
+        <h3>인건비 대체결의 (예시)</h3>
+        <p>
+          인건비는 일반적으로 <strong>1월에 일괄 결의</strong>하는 경우가 많습니다. 대변(11113 보통예금) → 차변(11114 당좌예금)
+          이동으로 처리하며, 급여지급내역·4대보험 집행내역·소득원천징수부 등 증빙을 함께 관리합니다.
+        </p>
+        <div className="two-column">
+          <div>
+            <p><span className="tag">연구비종합관리시스템</span></p>
+            <ul>
+              <li>① [연구비관리] 또는 청구(결의) 메뉴에서 인건비 관련 청구서/연구비신청서 선택</li>
+              <li>② 급여·4대보험 등 인건비 집행 내역에 맞춰 금액·비목 입력</li>
+              <li>③ 적요에 기간·인원·지급 기준 기재</li>
+              <li>④ [신청] 후 전자결재 → 결의서 출력</li>
+            </ul>
+          </div>
+          <div>
+            <p><span className="tag">베스트케어 – 대체결의서</span></p>
+            <ul>
+              <li>① [수입/대체결의관리] → [대체] 선택</li>
+              <li>② 대변: 보통예금(11113), 차변: 당좌예금(11114) 등 계정 설정</li>
+              <li>③ 인건비 비목코드(73731) 확인 후 저장 → [미리보기] → 인쇄</li>
+              <li>④ 수기결재 후 재무팀 제출 (급여지급내역·소득원천징수부 등 증빙 첨부)</li>
+            </ul>
+            <ul className="checklist">
+              <li><span className="box" /> 11113(보통예금) ↔ 11114(당좌예금) 계정 구분</li>
+              <li><span className="box" /> 증빙 금액과 시스템 입력 금액 일치</li>
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
@@ -340,6 +406,92 @@ function ExpenseSection() {
             "6) 베스트케어 – 지출결의서 작성 및 결재",
             "7) 증빙과 함께 재무팀 제출"
           ].join("\n")}
+        </div>
+      </section>
+
+      <section className="section">
+        <h3>1. 일반청구 (세금계산서·계좌이체)</h3>
+        <p>
+          <strong>시나리오 개요</strong>: 세금계산서 또는 계좌이체로 납부한 비용을 연구비종합관리시스템에서 청구서로
+          작성한 뒤, 분개수정·전자결재 → 통합이지바로 전송 → e-Branch 이체 → 베스트케어 지출결의서 순으로 처리합니다.
+        </p>
+        <div className="step-block">
+          <h4>Step 1. 연구비종합관리시스템 – 청구서 작성</h4>
+          <p><span className="tag">메뉴 경로</span> 연구비관리 → 지출관리 → 일반청구(또는 해당 청구 유형)</p>
+          <ul>
+            <li>① 전자세금계산서 XML 불러오기 시 열람 비밀번호: 사업자등록번호 1178201074</li>
+            <li>② 금액·부가세 자동 반영 여부 확인 후 비목·과제 선택</li>
+            <li>③ 계좌이체 건은 거래처·금액·계좌 정보 입력</li>
+            <li>④ 분개수정(세금계산서/계좌이체) 후 [신청] → 전자결재 상신</li>
+          </ul>
+        </div>
+        <div className="step-block">
+          <h4>Step 2. 연계관리 – 통합이지바로 전송</h4>
+          <p><span className="tag">메뉴 경로</span> 연계관리(또는 결의정보전송) → 통합이지바로 전송 대상 선택 → 전송</p>
+          <ul>
+            <li>① 결재 완료된 청구(결의)서를 통합이지바로 전송 대상으로 선택</li>
+            <li>② 송신 여부·확정 처리 확인</li>
+          </ul>
+        </div>
+        <div className="step-block">
+          <h4>Step 3. 이체전송(e-Branch) 및 실제 이체</h4>
+          <p><span className="tag">메뉴 경로</span> e-Branch: 지급대상 전송 연계 확인 후 실제 이체 실행</p>
+          <ul>
+            <li>① 연구비종합·통합이지바로에서 이체 대상 전송 완료 후 e-Branch에서 수신 확인</li>
+            <li>② e-Branch에서 이체 처리 실행</li>
+          </ul>
+        </div>
+        <div className="step-block">
+          <h4>Step 4. 베스트케어 – 지출결의서 작성</h4>
+          <p><span className="tag">메뉴 경로</span> 부서행정 → 결의관리 → 지출결의 (또는 해당 메뉴)</p>
+          <ul>
+            <li>① 비목코드(73733 장비/연구활동, 73732 재료비 등) 설정</li>
+            <li>② 차변·대변 계정 및 거래처 입력, 전표 생성</li>
+            <li>③ 미리보기 → 인쇄 후 수기결재, 증빙과 함께 재무팀 제출</li>
+          </ul>
+        </div>
+        <ul className="checklist">
+          <li><span className="box" /> XML·매입세금계산서 금액과 시스템 입력 금액 일치</li>
+          <li><span className="box" /> 과제기간·예산 비목 내 집행 여부 확인</li>
+        </ul>
+        <div className="warning">
+          세금계산서 열람 비밀번호는 사업자등록번호입니다. XML 불러오기 후 공급가·세액이 자동 반영되는지 반드시
+          확인하세요.
+        </div>
+      </section>
+
+      <section className="section">
+        <h3>2. 카드청구</h3>
+        <p>
+          <strong>시나리오 개요</strong>: 사업단 공용 카드로 결제한 내역을 청구할 때, 결제일자(매월 23일 출금) 기준으로
+          미청구 카드내역을 선택해 청구서를 작성합니다. 발급자별 카드번호(전상표·이후정·유경하 등)를 구분해야 합니다.
+        </p>
+        <div className="step-block">
+          <h4>Step 1. 연구비종합관리시스템 – 카드청구서 작성</h4>
+          <p><span className="tag">메뉴 경로</span> 연구비관리 → 지출관리 → 카드청구</p>
+          <ul>
+            <li>① 카드 매출내역(카드대금 청구서) 준비, 결제일자 = 당월 출금일(23일) 기준 확인</li>
+            <li>② 미청구 카드내역 선택, 사용 건별로 비목·과제 지정</li>
+            <li>③ 발급자(전상표·이후정·유경하)별 카드번호 구분하여 입력</li>
+            <li>④ [신청] → 전자결재 상신</li>
+          </ul>
+        </div>
+        <div className="step-block">
+          <h4>Step 2. 연계·이체·베스트케어</h4>
+          <p><span className="tag">흐름</span> 일반청구와 동일: 연계관리(통합이지바로 전송) → 이체전송(e-Branch) → 베스트케어 지출결의서</p>
+          <ul>
+            <li>① 결재 완료 후 연계관리에서 통합이지바로 전송</li>
+            <li>② e-Branch 이체 후 베스트케어에서 지출결의서 작성, 비목코드·차변·대변 설정</li>
+            <li>③ 카드 매출내역·청구서 증빙 첨부하여 재무팀 제출</li>
+          </ul>
+        </div>
+        <ul className="checklist">
+          <li><span className="box" /> 결제일자(23일)와 청구 대상 기간 일치</li>
+          <li><span className="box" /> 카드 발급자별 번호 구분 입력</li>
+        </ul>
+        <div className="warning">
+          카드 사용일과 결제일, 청구 대상 기간이 맞지 않으면 정산 시 불인정될 수 있으므로 인계인수서의 카드
+          발급정보를 참고해 구분하여 입력하세요.
         </div>
       </section>
 
